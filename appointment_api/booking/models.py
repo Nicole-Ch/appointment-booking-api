@@ -41,6 +41,8 @@ class AppointmentSlot(models.Model):
 
         ]#Helps us avoid exact duplicate of a slot with same provider and the booking times
 
+    def __str__(self):
+        return f"{self.provider} | {self.start_time.isoformat()} - {self.end_time.isoformat()}"
 
 class Appointment(models.Model):
     STATUS_CHOICES = [
@@ -48,22 +50,22 @@ class Appointment(models.Model):
         ("Cancelled", "Cancelled"),
         ("Completed", "Completed")
     ]
-    slot = models.ForeignKey(AppointmentSlot, on_delete=models.CASCADE, related_name="slots")
-    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE )
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    slot = models.OneToOneField(AppointmentSlot, on_delete=models.CASCADE, related_name="appointment")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True, related_name="appointments" )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Booked")
     created_at = models.DateTimeField(auto_now_add=True)
-    notes = models.TextField()
+    notes = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Appointment {self.pk} - {self.slot} by {self.user}"
 
 class Feedback(models.Model):
-    RATING_CHOICES = [
-        ("1", "1"),
-        ("2", "2"),
-        ("3", "3"),
-        ("4", "4"),
-    ]
     
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name="feedbacks")
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE )   
-    rating = models.CharField(max_length=3, choices=RATING_CHOICES, default="1")
-    comment =  models.TextField()
+    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name="feedbacks")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE )   
+    rating = models.PositiveSmallIntegerField(default=0, help_text="Rating out of 5")
+    comment =  models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True, blank=True)
 
+    def __str__(self):
+        return f"Feedback {self.pk} (rating={self.rating})"
