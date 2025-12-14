@@ -19,7 +19,7 @@ class ServiceType(models.Model):
     duration = models.DateTimeField(help_text="Duration in minutes")
 
     def __str__(self):
-         return  f"{self.name} ({self.duration_minutes}m)"
+         return  f"{self.name} ({self.duration}m)"
 
 class AppointmentSlot(models.Model):
     provider = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="appointmentprovider", on_delete=models.PROTECT)
