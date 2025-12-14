@@ -1,8 +1,26 @@
 from django.contrib import admin
-from .models import ServiceType , Appointment, AppointmentSlot, Feedback
+from .models import CustomUser, ServiceType , Appointment, AppointmentSlot, Feedback
 # Register your models here.
 
-admin.site.register(ServiceType)
-admin.site.register(Appointment)
-admin.site.register(AppointmentSlot)
-admin.site.register(Feedback)
+
+class CustomuserAdmin(admin.ModelAdmin):
+    list_display = ("email"," is_provider")
+
+class ServiceTypeAdmin(admin.ModelAdmin):
+    list_display = ("name", "duration")
+
+class AppointmentAdmin(admin.ModelAdmin):
+    list_display = ("id","user" , "slot" , "status" , "notes") 
+
+class AppointmentSlotAdmin(admin.ModelAdmin):
+    list_display = ("provider", "service_type", "start_time", "end_time", "is_booked")   
+
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ("user", "appointment", "rating", "created_at")       
+
+
+admin.site.register(CustomUser, CustomuserAdmin)    
+admin.site.register(ServiceType, ServiceTypeAdmin)
+admin.site.register(Appointment, AppointmentAdmin)
+admin.site.register(AppointmentSlot, AppointmentSlotAdmin)
+admin.site.register(Feedback, FeedbackAdmin)
