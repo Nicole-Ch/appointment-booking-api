@@ -4,7 +4,7 @@ from .models import CustomUser, ServiceType , Appointment, AppointmentSlot, Feed
 
 
 class CustomuserAdmin(admin.ModelAdmin):
-    list_display = ("email"," is_provider")
+    list_display = ("email","is_provider")
 
 class ServiceTypeAdmin(admin.ModelAdmin):
     list_display = ("name", "duration")
