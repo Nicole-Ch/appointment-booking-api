@@ -22,8 +22,8 @@ class ServiceType(models.Model):
          return  f"{self.name} ({self.duration}m)"
 
 class AppointmentSlot(models.Model):
-    provider = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="appointmentprovider", on_delete=models.PROTECT)
-    service_type = models.ForeignKey(ServiceType, on_delete=models.SET_NULL,null=True, related_name="appointmentslots")    
+    provider = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="appointmentProvider", on_delete=models.PROTECT)
+    service_type = models.ForeignKey(ServiceType, on_delete=models.SET_NULL,null=True, related_name="appointmentService")    
     
     start_time = models.TimeField()
     end_time = models.TimeField()
