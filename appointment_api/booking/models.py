@@ -19,7 +19,7 @@ class ServiceType(models.Model):
     duration = models.PositiveIntegerField(help_text="Duration in minutes")
 
     def __str__(self):
-         return  f"{self.name} ({self.duration}m)"
+         return  f"{self.name} ({dur_display}m)"
 
 class AppointmentSlot(models.Model):
     provider = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="appointmentProvider", on_delete=models.PROTECT)
@@ -61,7 +61,7 @@ class Appointment(models.Model):
 
 class Feedback(models.Model):
     
-    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name="feedbacks")
+    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name="AppointmentFeedback")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE )   
     rating = models.PositiveSmallIntegerField(default=0, help_text="Rating out of 5")
     comment =  models.TextField(null=True, blank=True)
