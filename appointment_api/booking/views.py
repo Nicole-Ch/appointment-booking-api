@@ -13,6 +13,7 @@ class ServiceTypeList(generics.ListAPIView):
 class ServiceTypeRetrieve(generics.RetrieveAPIView):
     queryset = ServiceType.objects.all()
     serializer_class = ServiceTypeSerializer
+    permission_classes = [permissions.AllowAny]
 
 class AppointmentSlotList(generics.ListAPIView):
     queryset = Appointment.objects.all()
@@ -21,4 +22,5 @@ class AppointmentSlotList(generics.ListAPIView):
 
 class AppointmentSlotRetrieve(generics.RetrieveAPIView):
     queryset = Appointment.objects.all()
-    serializer_class = AppointmentSlotSerializer            
+    serializer_class = AppointmentSlotSerializer 
+    permission_classes = [permissions.AllowAny]           
