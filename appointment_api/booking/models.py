@@ -25,8 +25,8 @@ class AppointmentSlot(models.Model):
     provider = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="appointmentProvider", on_delete=models.PROTECT)
     service_type = models.ForeignKey(ServiceType, on_delete=models.SET_NULL,null=True, related_name="appointmentService")    
     
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
     is_booked = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
