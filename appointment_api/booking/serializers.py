@@ -25,7 +25,7 @@ class AppointmentSlotSerializer(serializers.ModelSerializer):
         fields = ['id', 'provider', 'service_type', 'start_time', 'end_time', 'is_booked']
 
 class AppointmentSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer(read_only = True)
+    user = CustomUserSerializer(read_only = True) #Customer Info
     slot = AppointmentSlotSerializer(read_only = True)
 
 
@@ -35,7 +35,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 class FeedbackAppointment(serializers.ModelSerializer):
    
-    user = CustomUser(read_only = True)
+    user = CustomUserSerializer(read_only = True)
 
     class Meta:
         model = Feedback
