@@ -33,7 +33,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
         model = Appointment
         fields = ['id', 'user', 'slot', 'status', 'created_at', 'notes']
 
-class FeedbackAppointment(serializers.ModelSerializer):
+class FeedbackSerializer(serializers.ModelSerializer):
    
     user = CustomUserSerializer(read_only = True)
 
