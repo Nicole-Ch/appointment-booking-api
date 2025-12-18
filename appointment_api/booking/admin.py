@@ -7,7 +7,7 @@ class CustomuserAdmin(admin.ModelAdmin):
     list_display = ("email","is_provider")
 
 class ServiceTypeAdmin(admin.ModelAdmin):
-    list_display = ("name", "duration")
+    list_display = ("name", "get_duration")
 
 class AppointmentAdmin(admin.ModelAdmin):
     list_display = ("id","user" , "slot" , "status" , "notes") 

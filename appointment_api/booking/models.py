@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+from django.contrib import admin
+
 # Create your models here.
 class CustomUser(AbstractUser):
      email = models.EmailField('email address', unique=True)
@@ -18,8 +20,19 @@ class ServiceType(models.Model):
     name = models.CharField(max_length=200)
     duration = models.PositiveIntegerField(help_text="Duration in minutes")
 
+    #Converting duration to a human-readable format
+    @admin.display(description="Duration", ordering="duration")
+    def get_duration(self):
+
+        if self.duration is None:
+            return "00:00"
+        total_minutes = int(self.duration)
+        hours, minutes = divmod(total_minutes, 60)
+
+        return f"{hours:02d}:{minutes:02d}"
+
     def __str__(self):
-         return  f"{self.name} ({self.duration}m)"
+         return  f"{self.name}-> Duration-({self.get_duration()})"
 
 class AppointmentSlot(models.Model):
     provider = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="appointmentProvider", on_delete=models.PROTECT)
