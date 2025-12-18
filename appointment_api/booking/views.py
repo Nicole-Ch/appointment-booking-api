@@ -16,11 +16,11 @@ class ServiceTypeRetrieve(generics.RetrieveAPIView):
     permission_classes = [permissions.AllowAny]
 
 class AppointmentSlotList(generics.ListAPIView):
-    queryset = Appointment.objects.select_related('appointmentProvider', 'appointmentService').all()
+    queryset = Appointment.objects.select_related('appointment').all()
     serializer_class = AppointmentSlotSerializer
     permission_classes = [permissions.AllowAny]
 
 class AppointmentSlotRetrieve(generics.RetrieveAPIView):
-    queryset = Appointment.objects.select_related('appointmentProvider', 'appointmentService').all()
+    queryset = Appointment.objects.select_related('appointment').all()
     serializer_class = AppointmentSlotSerializer 
     permission_classes = [permissions.AllowAny]           

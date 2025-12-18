@@ -16,7 +16,7 @@ class CustomUser(AbstractUser):
 class ServiceType(models.Model):
     
     name = models.CharField(max_length=200)
-    duration = models.DateTimeField(help_text="Duration in minutes")
+    duration = models.PositiveIntegerField(help_text="Duration in minutes")
 
     def __str__(self):
          return  f"{self.name} ({self.duration}m)"
