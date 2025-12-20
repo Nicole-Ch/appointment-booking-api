@@ -29,7 +29,7 @@ class ServiceType(models.Model):
         total_minutes = int(self.duration)
         hours, minutes = divmod(total_minutes, 60)
 
-        return f"{hours:02d}:{minutes:02d}"
+        return f"{hours:02d}hours:{minutes:02d}minutes"
 
     def __str__(self):
          return  f"{self.name}-> Duration-({self.get_duration()})"
