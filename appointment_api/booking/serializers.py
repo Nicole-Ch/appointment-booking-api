@@ -49,8 +49,8 @@ class SlotCreateSerializer(serializers.ModelSerializer):
         fields = ['id', 'provider', 'service_type', 'start_time', 'end_time', 'is_booked']
 
     def validate(self, attrs):
-        start = attrs('start_time')
-        end = attrs('end_time')
+        start = attrs.get('start_time')
+        end = attrs.get('end_time')
         if start and end and start >= end:
             raise serializers.ValidationError("Start time should be before end time")
         return attrs    
