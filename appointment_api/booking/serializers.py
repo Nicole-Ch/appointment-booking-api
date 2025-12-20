@@ -41,3 +41,16 @@ class FeedbackSerializer(serializers.ModelSerializer):
         model = Feedback
         fields = ['appointment' , 'user', 'rating', 'comment', 'created_at']
 
+class SlotCreateSerializer(serializers.ModelSerializer):
+    provider = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = AppointmentSlot
+        fields = ['id', 'provider', 'service_type', 'start_time', 'end_time', 'is_booked']
+
+    def validate(self, attrs):
+        start = attrs('start_time')
+        end = attrs('end_time')
+        if start and end and start >= end:
+            raise serializers.ValidationError("Start time should be before end time")
+        return attrs    
