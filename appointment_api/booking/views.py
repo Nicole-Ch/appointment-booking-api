@@ -69,3 +69,21 @@ class AppointmentCreateView(generics.CreateAPIView):
 
        out_serializer = AppointmentSerializer(appointment,context={"request":request})
        return Response(out_serializer.data, status=status.HTTP_201_CREATED)  
+
+
+class AppointmentListView(generics.ListAPIView):
+    
+    serializer_class = AppointmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if getattr(Appointment, "is_provider", False):
+            return Appointment.objects.select_related("slot__provider", "slot__service_type", "user").filter(
+                slot__provider = user #only include appointments whose related slot’s provider equals the current user.
+            ).order_by('created_at')
+        
+        return Appointment.objects.select_related("slot__provider", "slot__service_type").filter(
+            user=user
+        ).order_by("created_at")

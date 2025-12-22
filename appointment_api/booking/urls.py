@@ -11,6 +11,7 @@ urlpatterns = [
 
    path('slot/create/' , SlotCreateView.as_view(), name='slot-create'),
    path('appointment/create', AppointmentCreateView.as_view(), name='appointment-create')
+   path("appointments/", AppointmentList.as_view(), name="appointment-list"),
 
 ]
 
