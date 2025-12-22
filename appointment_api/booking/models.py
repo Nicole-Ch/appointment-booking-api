@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.utils import timezone
 from django.contrib import admin
 
 # Create your models here.
@@ -54,8 +54,20 @@ class AppointmentSlot(models.Model):
 
         ]#Helps us avoid exact duplicate of a slot with same provider and the booking times
 
+
     def __str__(self):
-        return f"{self.provider} | {self.start_time.isoformat()} - {self.end_time.isoformat()}"
+        provider_display = getattr(self.provider, 'email', str(self.provider)) if self.provider else "unspecified"
+
+        if self.start_time:
+            start = timezone.localtime(self.start_time).isoformat()
+        else:
+            start = "Unspecified"
+
+        if self.end_time:
+            end = timezone.localtime(self.end_time).isoformat() 
+        else:
+            end = "unspecified"       
+        return f"{provider_display} | {start} - {end}"
 
 class Appointment(models.Model):
     STATUS_CHOICES = [
