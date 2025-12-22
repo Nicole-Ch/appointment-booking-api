@@ -57,3 +57,10 @@ class SlotCreateSerializer(serializers.ModelSerializer):
         if start and end and start >= end:
             raise serializers.ValidationError("Start time should be before end time")
         return attrs    
+    
+class AppointmentCreateSerializer(serializers.ModelSerializer):
+    slot  = serializers.PrimaryKeyRelatedField(queryset=AppointmentSlot.objects.all()) #customer selects an existing slot by ID
+
+    class Meta:
+        model = Appointment
+        fields = ['id', 'slot', 'notes']    
