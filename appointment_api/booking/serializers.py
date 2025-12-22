@@ -43,12 +43,15 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
 class SlotCreateSerializer(serializers.ModelSerializer):
     provider = serializers.PrimaryKeyRelatedField(read_only=True)
+    #PrimaryKeyRelatedField(read_only=True) tells DRF:
+    #“This existing model relationship should be represented by its ID, and the client cannot set it.”
 
     class Meta:
         model = AppointmentSlot
         fields = ['id', 'provider', 'service_type', 'start_time', 'end_time', 'is_booked']
 
     def validate(self, attrs):
+          # Using attrs.get() to safely access the 'start_time' and 'end_time' keys
         start = attrs.get('start_time')
         end = attrs.get('end_time')
         if start and end and start >= end:
