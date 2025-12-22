@@ -56,6 +56,7 @@ class AppointmentSlot(models.Model):
 
 
     def __str__(self):
+        #If there is a provider, this tries to get the email attribute from the provider object.
         provider_display = getattr(self.provider, 'email', str(self.provider)) if self.provider else "unspecified"
 
         if self.start_time:
@@ -66,7 +67,7 @@ class AppointmentSlot(models.Model):
         if self.end_time:
             end = timezone.localtime(self.end_time).isoformat() 
         else:
-            end = "unspecified"       
+            end = "Unspecified"       
         return f"{provider_display} | {start} - {end}"
 
 class Appointment(models.Model):
