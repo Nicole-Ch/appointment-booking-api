@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Feedback, CustomUser,Appointment,AppointmentSlot,  ServiceType
 from rest_framework import generics ,  permissions
-from .serializers import AppointmentSerializer,AppointmentSlotSerializer,CustomUserSerializer,FeedbackSerializer, ServiceTypeSerializer,AppointmentCreateSerializer
+from .serializers import AppointmentSerializer,AppointmentSlotSerializer,CustomUserSerializer,FeedbackSerializer, ServiceTypeSerializer,AppointmentCreateSerializer,SlotCreateSerializer
 from . permissions import IsProvider
 # Create your views here.
 
@@ -29,7 +29,7 @@ class AppointmentSlotRetrieve(generics.RetrieveAPIView):
 
 # Appointment Slot-Creation  
 class SlotCreateView(generics.CreateAPIView):
-    serializer_class = AppointmentCreateSerializer
+    serializer_class = SlotCreateSerializer
     permission_classes = [permissions.IsAuthenticated,IsProvider]
 
     def perform_create(self, serializer):
