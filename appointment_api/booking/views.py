@@ -5,7 +5,8 @@ from .serializers import AppointmentSerializer,AppointmentSlotSerializer,CustomU
 from . permissions import IsProvider
 from django.db import transaction
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError, PermissionDenied
+from rest_framework.views import APIView
+from rest_framework.exceptions import ValidationError, PermissionDenied, NotFound
 # Create your views here.
 
 
@@ -87,3 +88,33 @@ class AppointmentListView(generics.ListAPIView):
         return Appointment.objects.select_related("slot__provider", "slot__service_type").filter(
             user=user
         ).order_by("created_at")
+    
+
+#Appointment Cancel
+class AppointmentCancelView(APIView):
+    permission_class = [permissions.IsAuthenticated]
+
+    def put(self,pk,request):
+
+        try:
+            appt = Appointment.objects.select_related("slot__provider").get(pk=pk)
+        except Appointment.DoesNotExist:
+            raise NotFound("Appointment Does not Exist")  
+
+        user = request.user
+        slot_provider = appt.slot.provider
+
+        if not(user == appt.user or user == slot_provider or getattr(user, 'is_staff', False)):
+            raise PermissionDenied("You are not allowed to cancel this appointment")
+
+        if appt.status == "cancelled":
+            raise ValidationError("This appointment is already cancelled")
+
+        with transaction.atomic():
+            appt.status = "cancelled"
+            appt.save (update_field=["status"])
+            appt.slot.is_booked = "False"
+            appt.slot.save(update_fields='is_booked')
+
+        out = AppointmentSerializer(appt, context = {'request': request})
+        return Response(out.data, status=status.HTTP_200_OK)
