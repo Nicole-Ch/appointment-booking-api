@@ -63,4 +63,11 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appointment
-        fields = ['id', 'slot', 'notes']    
+        fields = ['id', 'slot', 'notes']  
+
+class AppointmentRescheduleSerializer(serializers.Serializer):
+
+    slot = serializers.PrimaryKeyRelatedField(queryset = AppointmentSlot.objects.all())
+
+    def validate_slot(self, value):
+        return value # return the "cleaned" value
