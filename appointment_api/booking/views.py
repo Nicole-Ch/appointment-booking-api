@@ -173,8 +173,10 @@ class AppointmentRescheduleView(APIView):
             if locked_old:
                 locked_old.is_booked = False
                 locked_old.save(update_fields=['is_booked'])
+            locked_new.is_booked = True
+            locked_new.save(update_fields=["is_booked"])    
 
-            out = AppointmentSerializer(appt, context={'request':request})
-            return Response(out.data, status=status.HTTP_200_OK)    
+        out = AppointmentSerializer(appt, context={'request':request})
+        return Response(out.data, status=status.HTTP_200_OK)    
 
 
