@@ -120,7 +120,7 @@ class AppointmentCancelView(APIView):
         return Response(out.data, status=status.HTTP_200_OK)
 
 #Appointment Reschedule
-class AppointmentReschedule(APIView):
+class AppointmentRescheduleView(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
