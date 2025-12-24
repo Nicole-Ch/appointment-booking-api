@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Feedback, CustomUser,Appointment,AppointmentSlot,  ServiceType
 from rest_framework import generics ,  permissions , status
-from .serializers import AppointmentSerializer,AppointmentSlotSerializer,CustomUserSerializer,FeedbackSerializer, ServiceTypeSerializer,AppointmentCreateSerializer,SlotCreateSerializer
+from .serializers import AppointmentSerializer,AppointmentSlotSerializer,CustomUserSerializer,FeedbackSerializer, ServiceTypeSerializer,AppointmentCreateSerializer,SlotCreateSerializer,AppointmentRescheduleSerializer
 from . permissions import IsProvider
 from django.db import transaction
 from rest_framework.response import Response
@@ -118,3 +118,63 @@ class AppointmentCancelView(APIView):
 
         out = AppointmentSerializer(appt, context = {'request': request})
         return Response(out.data, status=status.HTTP_200_OK)
+
+#Appointment Reschedule
+class AppointmentReschedule(APIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self,request,pk):
+        serializer = AppointmentRescheduleSerializer(data=request.data)
+        serializer.is_valid(raise_exception= True)  
+        new_slot = serializer.validated_data['slot']
+
+        try:
+            appt = Appointment.objects.select_related('slot__provider').get(pk=pk)
+        except Appointment.DoesNotExist:
+            raise NotFound("Appointment Not Found")
+
+        user = request.user
+        slot_provider = appt.slot.provider
+        old_slot = appt.slot
+
+        #Who can reschedule an appointment
+        if not(user==appt.user or user==slot_provider or getattr(user,'is_staff', False)):
+           raise PermissionDenied("You can't Reschedule an Appointment")
+
+
+        if new_slot.pk == old_slot.pk:
+            raise ValidationError("You picked the same slot")  
+
+       #Lock the slot ids
+        slot_ids = [old_slot.pk, new_slot.pk]
+        #ordering ids to avoid deadlocks
+        slot_ids_sorted = sorted(set(slot_ids)) 
+                                                                    
+        with transaction.atomic():
+            locked_slot_qs = AppointmentSlot.objects.select_for_update().filter(pk__in=slot_ids_sorted)
+
+            locked = {s.pk: s for s in locked_slot_qs}
+
+            locked_old = locked.get(old_slot.pk)   
+            locked_new = locked.get(new_slot.pk)   
+
+
+            if locked_new is None:
+                raise NotFound("New slot not found")
+            
+            if locked_new.is_booked or Appointment.objects.filter(slot=locked_new).exists():
+                raise ValidationError({"slot": "The requested slot is already booked"})
+            
+            #performing the switch
+            appt.slot = locked_new
+            appt.save(update_fields=['slot'])
+
+            if locked_old:
+                locked_old.is_booked = False
+                locked_old.save(update_fields=['is_booked'])
+
+            out = AppointmentSerializer(appt, context={'request':request})
+            return Response(out.data, status=status.HTTP_200_OK)    
+
+
