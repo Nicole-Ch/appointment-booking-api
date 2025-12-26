@@ -145,6 +145,10 @@ class AppointmentRescheduleView(APIView):
 
         if new_slot.pk == old_slot.pk:
             raise ValidationError("You picked the same slot")  
+        
+        if new_slot.provider_id != old_slot.provider_id:
+          raise ValidationError({"slot": "You must choose a slot from the same provider"})
+
 
        #Lock the slot ids
         slot_ids = [old_slot.pk, new_slot.pk]
@@ -180,3 +184,38 @@ class AppointmentRescheduleView(APIView):
         return Response(out.data, status=status.HTTP_200_OK)    
 
 
+class AppointmentFeedbackCreate(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+
+    def put(self, request, pk):
+
+        try:
+            apptFeedback = Appointment.objects.select_related('slot__provider').get(pk=pk)
+        except Appointment.DoesNotExist:
+            raise NotFound("Appointment Does not Exist")
+
+        #Only who created appointment can leave feedback
+        if request.user !=  apptFeedback.user:
+            raise ValidationError("Only user who created this appointment can leave a Feedback")
+        
+        if  apptFeedback.status != "Completed":
+            raise ValidationError("Appointment has to be completed to leave Feedback")
+        
+        if hasattr( apptFeedback, 'AppointmentFeedback'):
+            raise ValidationError("This appointment already has a Feedback")
+        
+
+        serializer = FeedbackSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)          
+
+        feedback = Feedback.objects.create(
+            appointment =  apptFeedback,
+            user = request.user,
+            rating = serializer.validated_data['rating'],
+            comment=serializer.validated_data.get("comment", "")
+            
+
+        )  
+
+        return Response({"id": feedback.pk, "rating": feedback.rating, "comment": feedback.comment}, status=status.HTTP_201_CREATED)

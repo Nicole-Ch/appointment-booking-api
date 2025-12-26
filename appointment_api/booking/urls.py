@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path , include
-from .views import AppointmentListView, AppointmentSlotRetrieve,AppointmentSlotList,ServiceTypeList,ServiceTypeRetrieve,AppointmentCreateView,SlotCreateView, AppointmentCancelView,AppointmentRescheduleView
+from .views import AppointmentListView, AppointmentSlotRetrieve,AppointmentSlotList,ServiceTypeList,ServiceTypeRetrieve,AppointmentCreateView,SlotCreateView, AppointmentCancelView,AppointmentRescheduleView, AppointmentFeedbackCreate
 
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
 
    path('appointments/<int:pk>/cancel/', AppointmentCancelView.as_view(), name='appointment-cancel'),#Cancel an Appointment
     path("appointments/<int:pk>/reschedule/", AppointmentRescheduleView.as_view(), name="appointment-reschedule"), #Reschedule an Appointment
+    path('appointment/<int:pk>/feedback/', AppointmentFeedbackCreate.as_view(), name='appointment-feedback')#feedback for an appointment
    
 
 
