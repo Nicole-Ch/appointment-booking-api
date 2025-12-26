@@ -4,6 +4,9 @@ from .views import AppointmentListView, AppointmentSlotRetrieve,AppointmentSlotL
 
 
 urlpatterns = [
+  
+
+
    path('service/', ServiceTypeList.as_view(), name='services' ), #View available services
    path('service/<int:pk>/', ServiceTypeRetrieve.as_view, name='serviceDetail'),# view service detail
    path('slot/', AppointmentSlotList.as_view(), name='slots'), #view appointment slots
