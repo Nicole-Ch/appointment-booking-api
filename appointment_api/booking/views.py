@@ -51,7 +51,7 @@ class AppointmentCreateView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
        serializer = self.get_serializer(data=request.data) #return a serializer instance for AppointmentCreateSerializer
-       serializer.is_valid(rase_exception = True)
+       serializer.is_valid(raise_exception = True)
        slot = serializer.validated_data['slot'] #slot is an AppointmentSlot instance
 
        with transaction.atomic():
