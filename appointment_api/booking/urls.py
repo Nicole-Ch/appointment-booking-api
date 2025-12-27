@@ -4,9 +4,9 @@ from .views import AppointmentListView, AppointmentSlotRetrieve,AppointmentSlotL
 
 
 urlpatterns = [
-  path("api/register/", RegisterView.as_view(), name="register"),
-  path("api/login/", LoginView.as_view(), name="login"),
-  path("api/logout/", LogoutView.as_view(), name="logout"),
+  path("register/", RegisterView.as_view(), name="register"),
+  path("login/", LoginView.as_view(), name="login"),
+  path("logout/", LogoutView.as_view(), name="logout"),
 
 
    path('service/', ServiceTypeList.as_view(), name='services' ), #View available services
