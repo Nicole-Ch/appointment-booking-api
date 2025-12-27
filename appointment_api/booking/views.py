@@ -49,6 +49,14 @@ class LoginView(APIView):
                            'password':password
                           
                           })
+     
+class LogoutView(APIView):
+    permission_classes=[permissions.IsAuthenticated]   
+
+    def post(self,request):
+        Token.objects.filter(user=request.user).delete()
+        return Response({"detail": "Logged out"}, status=status.HTTP_200_OK)
+         
 
 
 
