@@ -186,7 +186,7 @@ class AppointmentRescheduleView(APIView):
 
 class AppointmentFeedbackCreate(APIView):
     permission_classes = [permissions.IsAuthenticated]
-
+ 
 
     def put(self, request, pk):
 
@@ -202,7 +202,7 @@ class AppointmentFeedbackCreate(APIView):
         if  apptFeedback.status != "Completed":
             raise ValidationError("Appointment has to be completed to leave Feedback")
         
-        if hasattr( apptFeedback, 'AppointmentFeedback'):
+        if hasattr( apptFeedback, 'appointmentFeedback'):
             raise ValidationError("This appointment already has a Feedback")
         
 
