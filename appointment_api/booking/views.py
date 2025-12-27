@@ -1,13 +1,32 @@
 from django.shortcuts import render
 from .models import Feedback, CustomUser,Appointment,AppointmentSlot,  ServiceType
 from rest_framework import generics ,  permissions , status
-from .serializers import AppointmentSerializer,AppointmentSlotSerializer,CustomUserSerializer,FeedbackSerializer, ServiceTypeSerializer,AppointmentCreateSerializer,SlotCreateSerializer,AppointmentRescheduleSerializer
+from .serializers import AppointmentSerializer,AppointmentSlotSerializer,CustomUserSerializer,FeedbackSerializer, ServiceTypeSerializer,AppointmentCreateSerializer,SlotCreateSerializer,AppointmentRescheduleSerializer, LoginSerializer,RegisterSerializer
 from . permissions import IsProvider
 from django.db import transaction
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import ValidationError, PermissionDenied, NotFound
-# Create your views here.
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate, get_user_model
+
+
+
+class RegisterView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self,request):
+        serializer = RegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({
+            "id":user.pk,
+            'username': user.username,
+            'email': user.email,
+            'token': Token.key
+        }, status=status.HTTP_201_CREATED)
 
 
 class ServiceTypeList(generics.ListAPIView):
