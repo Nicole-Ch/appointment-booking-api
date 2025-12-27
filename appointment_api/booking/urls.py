@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.urls import path , include
-from .views import AppointmentListView, AppointmentSlotRetrieve,AppointmentSlotList,ServiceTypeList,ServiceTypeRetrieve,AppointmentCreateView,SlotCreateView, AppointmentCancelView,AppointmentRescheduleView, AppointmentFeedbackCreate
+from .views import AppointmentListView, AppointmentSlotRetrieve,AppointmentSlotList, LoginView, LogoutView, RegisterView,ServiceTypeList,ServiceTypeRetrieve,AppointmentCreateView,SlotCreateView, AppointmentCancelView,AppointmentRescheduleView, AppointmentFeedbackCreate
 
 
 urlpatterns = [
-  
+  path("api/register/", RegisterView.as_view(), name="register"),
+  path("api/login/", LoginView.as_view(), name="login"),
+  path("api/logout/", LogoutView.as_view(), name="logout"),
 
 
    path('service/', ServiceTypeList.as_view(), name='services' ), #View available services
