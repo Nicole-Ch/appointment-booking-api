@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework.filters import OrderingFilter
 
-
+User = get_user_model()
 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
