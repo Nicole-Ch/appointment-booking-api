@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.exceptions import ValidationError, PermissionDenied, NotFound
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, get_user_model
+from rest_framework.filters import OrderingFilter
 
 
 
@@ -126,6 +127,8 @@ class AppointmentListView(generics.ListAPIView):
     
     serializer_class = AppointmentSerializer
     permission_classes = [permissions.IsAuthenticated]
+    ordering_fields = ["created_at", "status"]
+    ordering = ["-created_at"]
 
     def get_queryset(self):
         user = self.request.user

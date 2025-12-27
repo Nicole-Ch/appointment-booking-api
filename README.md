@@ -17,18 +17,17 @@ POST /api/register/
 
 Request Body
 {
-  "username": "nicole@example.com",
-  "email": "nicole@example.com",
+  "username": "<nicole@example.com>",
+  "email": "<nicole@example.com>",
   "password": "strongpass"
 }
 
 Successful Response (201)
 {
   "id": 7,
-  "username": "nicole@example.com",
-  "email": "nicole@example.com"
+  "username": "<nicole@example.com>",
+  "email": "<nicole@example.com>"
 }
-
 
 📌 Password is securely hashed by Django.
 
@@ -38,16 +37,15 @@ POST /api/login/
 
 Request Body
 {
-  "username": "nicole@example.com",
+  "username": "<nicole@example.com>",
   "password": "strongpass"
 }
 
 Successful Response (200)
 {
   "token": "cbcb5e4ca1a1d0d48b00e3a1c841a129e89d7a53",
-  "username": "nicole@example.com"
+  "username": "<nicole@example.com>"
 }
-
 
 🔑 Save this token — it is required for all protected requests.
 
@@ -74,11 +72,10 @@ Successful Response (201)
     "end_time": "10:30",
     "provider": "Dr. Smith"
   },
-  "user": "nicole@example.com",
+  "user": "<nicole@example.com>",
   "notes": "Initial consultation",
   "status": "booked"
 }
-
 
 📌 The authenticated user is automatically attached using the token.
 
@@ -103,7 +100,6 @@ Successful Response (200)
   }
 ]
 
-
 📌 Users can only see their own appointments.
 
 5️⃣ Reschedule Appointment
@@ -127,7 +123,6 @@ Successful Response (200)
   "new_slot": 8
 }
 
-
 📌 Old slot is unlocked and new slot is locked using database transactions.
 
 6️⃣ Logout User
@@ -141,6 +136,5 @@ Successful Response (200)
 {
   "message": "Logged out successfully"
 }
-
 
 📌 Token is deleted and cannot be reused.
