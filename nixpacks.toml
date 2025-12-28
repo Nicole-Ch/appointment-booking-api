@@ -1,2 +1,3 @@
+# nixpacks.toml
 [phases.release]
 cmd = "cd appointment_api && python manage.py migrate"
