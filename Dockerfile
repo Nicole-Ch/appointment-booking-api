@@ -34,4 +34,4 @@ RUN printf '#!/bin/bash\n' > /app/APPOINTMENT-BOOKING-API/runner.sh && \
 RUN chmod +x /app/APPOINTMENT-BOOKING-API/runner.sh
 
 # Command to run the application
-CMD ["/app/runner.sh"]
+CMD ["./runner.sh"]
