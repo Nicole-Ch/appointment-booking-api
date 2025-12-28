@@ -27,11 +27,11 @@ RUN pip install -r requirements.txt
 COPY . /app/
 
 # Create a script to run migrations and start the server
-RUN printf '#!/bin/bash\n' > /app/runner.sh && \
-    printf 'cd /app/APPOINTMENT-BOOKING-API\n' >> /app/runner.sh && \ 
-    printf 'python manage.py migrate --noinput\n' >> /app/runner.sh && \
-    printf 'gunicorn appointment_api.wsgi:application --bind 0.0.0.0:${PORT:-8000}\n' >> /app/runner.sh
-RUN chmod +x /app/runner.sh
+# Create a script to run migrations and start the server
+RUN printf '#!/bin/bash\n' > /app/APPOINTMENT-BOOKING-API/runner.sh && \
+    printf 'python manage.py migrate --noinput\n' >> /app/APPOINTMENT-BOOKING-API/runner.sh && \
+    printf 'exec gunicorn appointment_api.wsgi:application --bind 0.0.0.0:${PORT:-8000}\n' >> /app/APPOINTMENT-BOOKING-API/runner.sh
+RUN chmod +x /app/APPOINTMENT-BOOKING-API/runner.sh
 
 # Command to run the application
 CMD ["/app/runner.sh"]
