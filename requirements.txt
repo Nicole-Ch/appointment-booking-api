@@ -1,6 +1,4 @@
-Django>=5.2.3
+django
 djangorestframework
-gunicorn
-whitenoise
-psycopg2-binary   # PostgreSQL driver
-dj-database-url   # For reading DATABASE_URL
+environs
+mysqlclient

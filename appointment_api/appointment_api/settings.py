@@ -31,8 +31,9 @@ AUTH_USER_MODEL = 'booking.CustomUser'
 
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = ['*']
 # Example on server: ALLOWED_HOSTS="yourapp.pythonanywhere.com"
+CSRF_TRUSTED_ORIGINS = ["http://*.on-acorn.io", "https://*.on-acorn.io"]
 
 
 
@@ -101,11 +102,14 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3'),
-        conn_max_age=600,
-        ssl_require=True
-    )
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": os.getenv("MARIADB_DATABASE"),
+        "USER": os.getenv("MARIADB_USER"),
+        "PASSWORD": os.getenv("MARIADB_ROOT_PASSWORD"),
+        "HOST": os.getenv("MARIADB_HOST"),
+        "PORT": os.getenv("MARIADB_PORT", 3306),
+    }
 }
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
